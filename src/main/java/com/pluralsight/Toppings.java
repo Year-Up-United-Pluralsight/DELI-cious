@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 public class Toppings {
 
-    private HashMap<String, Integer> meatMap;
-    private HashMap<String, Integer> cheeseMap;
+    private static HashMap<String, Integer> meatMap = new HashMap<>();
+    private static HashMap<String, Integer> cheeseMap = new HashMap<>();
 
     private ArrayList<String> meats;
     private ArrayList<String> cheeses;
@@ -36,7 +36,23 @@ public class Toppings {
         return sauces;
     }
 
-// DISTINCTIONS
+    public HashMap<String, Integer> getMeatMap() {
+        return meatMap;
+    }
+
+    public HashMap<String, Integer> getCheeseMap() {
+        return cheeseMap;
+    }
+
+    public void setMeatMap(HashMap<String, Integer> meatMap) {
+        Toppings.meatMap = meatMap;
+    }
+
+    public void setCheeseMap(HashMap<String, Integer> cheeseMap) {
+        Toppings.cheeseMap = cheeseMap;
+    }
+
+    // DISTINCTIONS
     // Premium: Meats & Cheese
     //      Name matters
     //      Price matters (since it's extra)

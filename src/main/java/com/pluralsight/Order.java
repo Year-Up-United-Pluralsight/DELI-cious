@@ -11,8 +11,19 @@ public class Order {
     private ArrayList<Drink> drinks = new ArrayList<>();;
     private ArrayList<String> chips = new ArrayList<>();;
 
-    private static HashMap<String, Integer> meatMap = new HashMap<>();
-    private static HashMap<String, Integer> cheeseMap = new HashMap<>();
+    // <editor-fold desc="GETTER METHODS">
+    public ArrayList<Sandwich> getSandwiches() {
+        return sandwiches;
+    }
+
+    public ArrayList<Drink> getDrinks() {
+        return drinks;
+    }
+
+    public ArrayList<String> getChips() {
+        return chips;
+    }
+    // </editor-fold>
 
     private static Scanner scanner = new Scanner(System.in);
 
@@ -51,6 +62,7 @@ public class Order {
 
             String meatTopping = "";
             ArrayList<String> meats = new ArrayList<>();
+            HashMap<String, Integer> meatMap = new HashMap<>();
 
             // On valid input, checks if meat is already added onto sandwich
             do {
@@ -91,10 +103,13 @@ public class Order {
 
             } while (!meatTopping.isBlank());
 
+
+
         // Cheese topping choice & extra added to  hashmap
 
             String cheeseTopping = "";
             ArrayList<String> cheeses = new ArrayList<>();
+            HashMap<String, Integer> cheeseMap = new HashMap<>();
 
             // On valid input, checks if meat is already added onto sandwich
             do {
@@ -107,7 +122,7 @@ public class Order {
                 if (!cheeseMap.isEmpty()) {
                     // Checks if meat is already added
                     for (String key : cheeseMap.keySet()) {
-                        if (key.equals(meatTopping)) {
+                        if (key.equals(cheeseTopping)) {
                             System.out.print("This cheese topping has already been added to your sandwich");
                             isDuplicateCheese = true;
                         }
@@ -129,7 +144,7 @@ public class Order {
                     else { cheeses.add(cheeseTopping); }
 
                     // Adds to hashmap (for price calculation) the meat topping type along with whether its quantity is extra
-                    meatMap.put(cheeseTopping, (wantsExtraCheese.equalsIgnoreCase("Y")) ? 1 : 0);
+                    cheeseMap.put(cheeseTopping, (wantsExtraCheese.equalsIgnoreCase("Y")) ? 1 : 0);
 
                 }
 
@@ -183,6 +198,8 @@ public class Order {
 
             // Builds topping
             Toppings toppings = new Toppings(meats, cheeses, otherToppings, allSauces);
+            toppings.setMeatMap(meatMap);
+            toppings.setCheeseMap(cheeseMap);
 
         // Toasted
             System.out.print("Would you like the sandwich toasted? (Y/N) ");
@@ -194,25 +211,38 @@ public class Order {
         // Builds sandwich
             Sandwich sandwich = new Sandwich(bread, size, toppings, isToasted);
 
-            order.sandwiches.add(sandwich);
-
-            printOrder(order);
+            displayOrderOptionsScreen();
         }
 
-//        // Adds drink
-//        else if (userChoice == 2) {
-//
-//        }
-//
-//        // Adds chips
-//        else if (userChoice == 3) {
-//
-//        }
-//
-//        // Checkout
-//        else if (userChoice == 4) {
-//
-//        }
+        // Adds drink
+        else if (userChoice == 2) {
+            System.out.println("What flavor would you like? ➤ ");
+            String flavor = scanner.nextLine();
+
+            System.out.println("What size drink would you like? ➤ ");
+            String size = scanner.nextLine();
+
+            Drink drink = new Drink(flavor, size);
+
+            order.drinks.add(drink);
+
+            displayOrderOptionsScreen();
+        }
+
+        // Adds chips
+        else if (userChoice == 3) {
+            System.out.println("What kind of chips would you like? ➤ ");
+            String chipsInput = scanner.nextLine();
+
+            order.chips.add(chipsInput);
+
+            displayOrderOptionsScreen();
+        }
+
+        // Checkout
+        else if (userChoice == 4) {
+            Checkout.displayOrder(order);
+        }
 //
 //        // Cancel order
 //        else if (userChoice == 0) {
@@ -224,58 +254,4 @@ public class Order {
 //        }
     }
 
-//    public static void addSandwich() {
-//
-//        System.out.print("Select your Bread: ");
-//        System.out.print("Sandwich Size: ");
-//        addToppings();
-//        System.out.print("Would you like the sandwich toasted? ");
-//
-//    }
-//
-//    public static void addToppings() {
-//
-//
-//    }
-//
-//    public static void addDrink() {
-//
-//        System.out.print("Drink size: ");
-//        System.out.print("Drink flavor: ");
-//    }
-//
-//    public static void addChips() {
-//
-//        System.out.print("Drink type: ");
-//    }
-//
-//    public static void getOrderPrice(){
-//
-//    }
-
-    public static void printOrder(Order order){
-        for (Sandwich sandwich : order.sandwiches){
-            System.out.print(sandwich.getBread() + "; ");
-            System.out.print(sandwich.getSize() + "; ");
-
-            for (String meat : sandwich.getToppings().getMeats()){
-                System.out.print(meat + "; ");
-            }
-
-            for (String cheese : sandwich.getToppings().getCheeses()){
-                System.out.print(cheese + "; ");
-            }
-
-            for (String otherTopping : sandwich.getToppings().getOtherToppings()){
-                System.out.print(otherTopping + "; ");
-            }
-
-            for (String sauce : sandwich.getToppings().getSauces()){
-                System.out.print(sauce + "; ");
-            }
-
-            System.out.println((sandwich.isToasted()) ? "Toasted" : "Not Toasted");
-
-        }
-    }
 }
