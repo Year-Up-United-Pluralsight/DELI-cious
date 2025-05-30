@@ -7,9 +7,9 @@ import java.util.Scanner;
 
 public class Order {
 
-    private ArrayList<Sandwich> sandwiches;
-    private ArrayList<Drink> drinks;
-    private ArrayList<String> chips;
+    private ArrayList<Sandwich> sandwiches = new ArrayList<>();
+    private ArrayList<Drink> drinks = new ArrayList<>();;
+    private ArrayList<String> chips = new ArrayList<>();;
 
     private static HashMap<String, Integer> meatMap = new HashMap<>();
     private static HashMap<String, Integer> cheeseMap = new HashMap<>();
@@ -40,155 +40,143 @@ public class Order {
         if (userChoice == 1) {
 
         // GETS USER SANDWICH CHOICES
-            System.out.print("Select your bread: ");
+            System.out.print("Which bread would you like? ➤ ");
             String bread = scanner.nextLine();
 
-            System.out.print("Sandwich size: ");
+            System.out.print("Which size would you like your sandwich to be? ➤ ");
             String size = scanner.nextLine();
 
         // <editor-fold desc="TOPPING CHOICES">
         // Meat topping choice & extra added to  hashmap
-            System.out.print("Would you like to add a meat topping? (Y/N) ");
-            String wantsMeatTopping = scanner.nextLine();
+
+            String meatTopping = "";
             ArrayList<String> meats = new ArrayList<>();
 
-            while (wantsMeatTopping.equalsIgnoreCase("Y")) {
+            // On valid input, checks if meat is already added onto sandwich
+            do {
+                System.out.print("Please enter a meat topping (press enter to skip) ➤ ");
+                meatTopping = scanner.nextLine();
 
                 boolean isDuplicateMeat = false;
-                String meatTopping;
 
-                // Gets user meat topping; loops when meat inputted has already been added
-                do {
-                    System.out.print("Please enter a meat topping: ");
-                    meatTopping = scanner.nextLine();
-
-                    if (!meatMap.isEmpty()) {
-                        // Checks if meat is already added
-                        for (String key : meatMap.keySet()) {
-                            if (key.equals(meatTopping)) {
-                                System.out.print("This meat topping has already been added to your sandwich");
-                                HomeScreen.printDelayedEllipsis();
-                                isDuplicateMeat = true;
-                            }
+                // Checks if current meat is a duplicate (if meatMap is populated)
+                if (!meatMap.isEmpty()) {
+                    // Checks if meat is already added
+                    for (String key : meatMap.keySet()) {
+                        if (key.equals(meatTopping)) {
+                            System.out.print("This meat topping has already been added to your sandwich");
+                            isDuplicateMeat = true;
                         }
                     }
+                }
+
+                // Adds meat to meatMap and meat arraylist (if it's not a duplicate)
+                if (!isDuplicateMeat && !meatTopping.isBlank()) {
+
+                    // Gets whether meat quantity is extra
+                    System.out.print("Would you like extra of your selected meat topping? (Y/N) ");
+                    String wantsExtraMeat = scanner.nextLine();
+
+                    // Adds "extra" to beginning of topping name in arraylist
+                    if (wantsExtraMeat.equalsIgnoreCase("Y")){ meats.add("Extra " + meatTopping); }
+
+                    // Otherwise adds topping with its normal name in arraylist
+                    else { meats.add(meatTopping); }
+
+                    // Adds to hashmap (for price calculation) the meat topping type along with whether its quantity is extra
+                    meatMap.put(meatTopping, (wantsExtraMeat.equalsIgnoreCase("Y")) ? 1 : 0);
+
+                }
 
 
-                } while (isDuplicateMeat);
-
-                // Meat is not a duplicate, add it to arraylist
-                meats.add(meatTopping);
-
-                // Gets whether meat quantity is extra
-                System.out.print("Would you like extra of your selected meat topping? (Y/N)");
-                String wantsExtraMeat = scanner.nextLine();
-
-                // Adds "extra" to beginning of topping name in arraylist
-                if (wantsExtraMeat.equalsIgnoreCase("Y")){ meats.add("Extra " + meatTopping); }
-
-                // Otherwise adds topping with its normal name in arraylist
-                else { meats.add(meatTopping); }
-
-                // Adds to hashmap (for price calculation) the meat topping type along with whether its quantity is extra
-                meatMap.put(meatTopping, (wantsExtraMeat.equalsIgnoreCase("Y")) ? 1 : 0);
-            }
+            } while (!meatTopping.isBlank());
 
         // Cheese topping choice & extra added to  hashmap
-            System.out.print("Would you like to add a cheese topping? (Y/N) ");
-            String wantsCheeseTopping = scanner.nextLine();
+
+            String cheeseTopping = "";
             ArrayList<String> cheeses = new ArrayList<>();
 
-            while (wantsCheeseTopping.equalsIgnoreCase("Y")) {
+            // On valid input, checks if meat is already added onto sandwich
+            do {
+                System.out.print("Please enter a cheese topping (press enter to skip) ➤ ");
+                cheeseTopping = scanner.nextLine();
 
                 boolean isDuplicateCheese = false;
-                String cheeseTopping;
 
-
-                // Gets user cheese topping; loops when cheese inputted has already been added
-                do {
-                    System.out.print("Please enter a cheese topping: ");
-                    cheeseTopping = scanner.nextLine();
-
-                    if (!cheeseMap.isEmpty()) {
-
-                        // Checks if cheese is already added
-                        for (String key : cheeseMap.keySet()) {
-                            if (key.equals(cheeseTopping)) {
-                                System.out.print("This cheese topping has already been added to your sandwich");
-                                HomeScreen.printDelayedEllipsis();
-                                isDuplicateCheese = true;
-                            }
+                // Checks if current meat is a duplicate (if meatMap is populated)
+                if (!cheeseMap.isEmpty()) {
+                    // Checks if meat is already added
+                    for (String key : cheeseMap.keySet()) {
+                        if (key.equals(meatTopping)) {
+                            System.out.print("This cheese topping has already been added to your sandwich");
+                            isDuplicateCheese = true;
                         }
                     }
+                }
+
+                // Adds meat to meatMap and meat arraylist (if it's not a duplicate)
+                if (!isDuplicateCheese && !cheeseTopping.isBlank()) {
 
 
-                } while (isDuplicateCheese);
+                    // Gets whether meat quantity is extra
+                    System.out.print("Would you like extra of your selected cheese topping? (Y/N) ");
+                    String wantsExtraCheese = scanner.nextLine();
+
+                    // Adds "extra" to beginning of topping name in arraylist
+                    if (wantsExtraCheese.equalsIgnoreCase("Y")){ cheeses.add("Extra " + cheeseTopping); }
+
+                    // Otherwise adds topping with its normal name in arraylist
+                    else { cheeses.add(cheeseTopping); }
+
+                    // Adds to hashmap (for price calculation) the meat topping type along with whether its quantity is extra
+                    meatMap.put(cheeseTopping, (wantsExtraCheese.equalsIgnoreCase("Y")) ? 1 : 0);
+
+                }
 
 
-                // Adds new unique cheese to cheeses arraylist
-                cheeses.add(cheeseTopping);
-
-                // Gets whether cheese quantity is extra
-                System.out.print("Would you like extra of your selected cheese topping? (Y/N)");
-                boolean wantsExtraCheese = scanner.nextBoolean();
-                scanner.nextLine();
-
-                // Adds "extra" to beginning of topping name in arraylist
-                if (wantsExtraCheese){ meats.add("Extra " + cheeseTopping); }
-
-                // Otherwise adds topping with its normal name in arraylist
-                else { cheeses.add(cheeseTopping); }
-
-                // Adds to hashmap the meat topping type along with whether its quantity is extra
-                cheeseMap.put(cheeseTopping, (wantsExtraCheese) ? 1 : 0);
-
-            }
+            } while (!cheeseTopping.isBlank());
 
         // Other/regular toppings
             ArrayList<String> otherToppings = new ArrayList<>();
-            System.out.print("Please list any other toppings you'd like to add (Press enter to exit): ");
+            System.out.print("Please list any other toppings you'd like to add (press enter to skip) ➤ ");
             String toppingInput = scanner.nextLine();
 
             // Adds input to arraylist of toppings if user does not exit
             while (!toppingInput.isEmpty()){
 
                 // Gets whether regular topping quantity is extra
-                System.out.print("Would you like extra of your selected topping? (Y/N)");
-                boolean wantsExtraTopping = scanner.nextBoolean();
-                scanner.nextLine();
+                System.out.print("Would you like extra of your selected topping? (Y/N) ");
+                String wantsExtraTopping = scanner.nextLine();
 
                 // Adds "extra" to beginning of topping name
-                if (wantsExtraTopping){ otherToppings.add("Extra " + toppingInput); }
+                if (wantsExtraTopping.equalsIgnoreCase("Y")){ otherToppings.add("Extra " + toppingInput); }
 
                 // Otherwise adds topping with its normal name
                 else { otherToppings.add(toppingInput); }
 
-                HomeScreen.printDelayedEllipsis();
-                System.out.print("Please list any other toppings you'd like to add to your order (Press enter to exit): ");
+                System.out.print("Please list any other toppings you'd like to add to your order (press enter to skip) ➤ ");
                 toppingInput = scanner.nextLine();
             }
 
         // Sauces
             ArrayList<String> allSauces = new ArrayList<>();
-            System.out.print("Please list any sauces you'd like to add to your order (Press enter to exit): ");
+            System.out.print("Please list any sauces you'd like to add to your order (press enter to skip) ➤ ");
             String sauceInput = scanner.nextLine();
 
             // Adds input to arraylist of sauces if user does not exit
             while (!sauceInput.isEmpty()){
 
                 // Gets whether sauces quantity is extra
-                System.out.print("Would you like extra of your selected sauce? (Y/N)");
-                boolean wantsExtraSauce = scanner.nextBoolean();
-                scanner.nextLine();
+                System.out.print("Would you like extra of your selected sauce? (Y/N) ");
+                String wantsExtraSauce = scanner.nextLine();
 
                 // Adds "extra" to beginning of topping name
-                if (wantsExtraSauce){ allSauces.add("Extra " + sauceInput); }
+                if (wantsExtraSauce.equalsIgnoreCase("Y")){ allSauces.add("Extra " + sauceInput); }
 
                 // Otherwise adds topping with its normal name
                 else { allSauces.add(sauceInput); }
 
-                HomeScreen.printDelayedEllipsis();
-                System.out.print("Please list any other sauces you'd like to add to your order (Press enter to exit): ");
+                System.out.print("Please list any other sauces you'd like to add to your order (press enter to skip) ➤ ");
                 sauceInput = scanner.nextLine();
             }
         // </editor-fold>
@@ -197,9 +185,8 @@ public class Order {
             Toppings toppings = new Toppings(meats, cheeses, otherToppings, allSauces);
 
         // Toasted
-            System.out.print("Would you like the sandwich toasted? ");
+            System.out.print("Would you like the sandwich toasted? (Y/N) ");
             String toastChoice = scanner.nextLine();
-            scanner.nextLine();
 
             // Sets isToasted as bool
             boolean isToasted = toastChoice.equalsIgnoreCase("Y");
@@ -268,26 +255,26 @@ public class Order {
 
     public static void printOrder(Order order){
         for (Sandwich sandwich : order.sandwiches){
-            System.out.println(sandwich.getBread());
-            System.out.println(sandwich.getSize());
+            System.out.print(sandwich.getBread() + "; ");
+            System.out.print(sandwich.getSize() + "; ");
 
             for (String meat : sandwich.getToppings().getMeats()){
-                System.out.print(meat + ";");
+                System.out.print(meat + "; ");
             }
 
             for (String cheese : sandwich.getToppings().getCheeses()){
-                System.out.print(cheese + ";");
+                System.out.print(cheese + "; ");
             }
 
             for (String otherTopping : sandwich.getToppings().getOtherToppings()){
-                System.out.print(otherTopping + ";");
+                System.out.print(otherTopping + "; ");
             }
 
             for (String sauce : sandwich.getToppings().getSauces()){
-                System.out.print(sauce + ";");
+                System.out.print(sauce + "; ");
             }
 
-            System.out.println(sandwich.getBread());
+            System.out.println((sandwich.isToasted()) ? "Toasted" : "Not Toasted");
 
         }
     }
