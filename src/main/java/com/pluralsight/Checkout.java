@@ -158,8 +158,7 @@ public class Checkout {
         return total;
     }
 
-
-    public static void confirmsOrder(Order order){
+    public static void confirmOrder(Order order){
         try {
 
             // Creates formatter with proper format; formats current datetime using this format

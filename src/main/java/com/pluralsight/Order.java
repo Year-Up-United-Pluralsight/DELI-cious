@@ -27,7 +27,7 @@ public class Order {
 
     private static Scanner scanner = new Scanner(System.in);
 
-    public static void displayOrderOptionsScreen() {
+    public void displayOrderOptionsScreen() {
 
         Order order = new Order();
 
@@ -57,7 +57,7 @@ public class Order {
             System.out.print("Which size would you like your sandwich to be? ➤ ");
             String size = scanner.nextLine();
 
-        // <editor-fold desc="TOPPING CHOICES">
+        // <editor-fold desc="TOPPINGS">
         // Meat topping choice & extra added to  hashmap
 
             String meatTopping = "";
@@ -241,7 +241,17 @@ public class Order {
 
         // Checkout
         else if (userChoice == 4) {
-            Checkout.displayOrder(order);
+            Checkout.displayOrder(this);
+            Checkout.displayPrice(this);
+
+            System.out.println("Would you like to confirm or would you like to cancel your order? (Y/N) ➤ ");
+            String confirmOrder = scanner.nextLine();
+
+            if (confirmOrder.equalsIgnoreCase("Y")){
+                Checkout.confirmOrder(this);
+                HomeScreen.displayHomeScreen();
+            }
+
         }
 //
 //        // Cancel order
